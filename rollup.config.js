@@ -8,13 +8,14 @@ import { terser } from 'rollup-plugin-terser'
 const production = !process.env.ROLLUP_WATCH
 
 export default {
-	input: 'client/main.js',
+	input: 'client/client.js',
 	output: {
-		sourcemap: true,
+		sourcemap: !production,
 		format: 'iife',
 		name: 'app',
 		file: 'public/build/bundle.js'
 	},
+	watch: { clearScreen: false },
 	plugins: [
 		// compile the svelte
 		svelte({
@@ -38,8 +39,8 @@ export default {
 		// converts commonjs bundles to es6
 		commonjs(),
 
-		// in dev mode serve up the page
-		!production && serve(),
+		// in dev mode start the server too
+		!production && server(),
 
 		// reload the page whene the public dir changes
 		// this includes the build folder
@@ -50,19 +51,19 @@ export default {
 	]
 }
 
-function serve() {
-	let started = false
+function server() {
+	let started = false;
 
 	return {
 		writeBundle() {
 			if (!started) {
-				started = true
+				started = true;
 
-				require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+				require('child_process').spawn('npm', ['run', 'watch'], {
 					stdio: ['ignore', 'inherit', 'inherit'],
 					shell: true
-				})
+				});
 			}
 		}
-	}
+	};
 }

@@ -16,7 +16,7 @@
 	}
 
 	let rect = new PIXI.Graphics()
-	rect.beginFill(0x00ff00)
+	rect.beginFill(0x00ffff)
 	rect.drawRect(50, 50, 100, 100)
     rect.endFill()
 
